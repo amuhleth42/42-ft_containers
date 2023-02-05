@@ -19,12 +19,12 @@ public:
 	//crbegin();
 	//crend();
 	
-	//size();
-	//max_size();
+	size_t	size(void) const;
+	size_t	max_size(void) const;
 	//resize();
 	//capacity();
-	//empty();
-	//reserve();
+	bool	empty(void) const;
+	void	reserve(size_t newCap);
 	//shrink_to_fit();
 
 	//operator[]();
@@ -39,7 +39,7 @@ public:
 	//insert();
 	//erase();
 	//swap();
-	//clear();
+	void	clear(void);
 	//emplace();
 	//emplace_back();
 

@@ -46,7 +46,7 @@ void	Vector<T>::ReAlloc(size_t newCapacity)
 	if (newCapacity < _size)
 		_size = newCapacity;
 	for (size_t i = 0 ; i < _size ; i++)
-		newBlock[i] = _data[i];
+		newBlock[i] = std::move(_data[i]);
 	delete _data;
 	_data = newBlock;
 	_capacity = newCapacity;
