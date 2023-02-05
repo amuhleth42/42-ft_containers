@@ -1,53 +1,35 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-template <typename T, typename Alloc = allocator<T>>
-class	vector {
+# include <iostream>
+
+template <typename T>
+class	Vector {
 
 public:
 
+	Vector(void);
 
-	vector(void);
+	void	push_back(T const & value);
+
+	size_t	size(void) const;
 
 
-	//begin()
-	//end();
-	//rbegin();
-	//rend();
-	//cbegin();
-	//cend();
-	//crbegin();
-	//crend();
+	T const &	operator[](size_t i) const;
+	T&			operator[](size_t i);
 	
-	//size();
-	//max_size();
-	//resize();
-	//capacity();
-	//empty();
-	//reserve();
-	//shrink_to_fit();
-
-	//operator[]();
-	//at();
-	//front();
-	//back();
-	//data();
-
-	//assign();
-	//push_back();
-	//pop_back();
-	//insert();
-	//erase();
-	//swap();
-	//clear();
-	//emplace();
-	//emplace_back();
-
-	//get_allocator();
 
 private:
 
+	T*		_data;
+	size_t	_size;
+	size_t	_capacity;
 
+	
+
+	void	ReAlloc(size_t newCapacity);
 };
+
+#include "Vector.tpp"
 
 #endif
