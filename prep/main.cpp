@@ -13,11 +13,14 @@ int	main(void)
 
 	v.push_back("amuhleth");
 	v.push_back("c++");
+	std::cout << "size: " << v.size() << std::endl;
+	printVector(v);
+
 	v.push_back("vector");
 	v.push_back("amuhleth");
 	v.push_back("c++");
 	v.push_back("vector");
-
+	std::cout << "size: " << v.size() << std::endl;
 	printVector(v);
 
 }
