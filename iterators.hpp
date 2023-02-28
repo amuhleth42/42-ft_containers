@@ -1,6 +1,8 @@
 #ifndef ITERATORS_HPP
 # define ITERATORS_HPP
 
+# include <stdlib.h>
+
 namespace ft
 {
 
@@ -49,13 +51,13 @@ public:
 	// truc tres chelou, je comprends pas
 	operator RandomAccessIterator<const T>(void) const
 	{
-		return (RandomAccessIterator<const T>(_p);
+		return (RandomAccessIterator<const T>(_p));
 	}
 
 	pointer base(void) const { return (_p); }
 
 	reference	operator*(void) const { return *_p; }
-	pointer		operator->(void) const { return _p }
+	pointer		operator->(void) const { return _p; }
 
 	RandomAccessIterator&	operator++(void)
 	{
@@ -64,7 +66,7 @@ public:
 	}
 	RandomAccessIterator	operator++(int)
 	{
-		return (RandomAccessIterator(_p++);
+		return (RandomAccessIterator(_p++));
 	}
 
 	RandomAccessIterator&	operator--(void)
@@ -74,17 +76,17 @@ public:
 	}
 	RandomAccessIterator	operator--(int)
 	{
-		return (RandomAccessIterator(_p--);
+		return (RandomAccessIterator(_p--));
 	}
 
 	RandomAccessIterator	operator+(difference_type const n) const
 	{
-		return (RandomAccessIterator(_p + n);
+		return (RandomAccessIterator(_p + n));
 	}
 
 	RandomAccessIterator	operator-(difference_type const n) const
 	{
-		return (RandomAccessIterator(_p - n);
+		return (RandomAccessIterator(_p - n));
 	}
 
 	difference_type		operator-(RandomAccessIterator rhs) const
@@ -107,7 +109,7 @@ private:
 
 
 
-}
+};
 
 
 
