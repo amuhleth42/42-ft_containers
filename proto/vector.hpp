@@ -1,12 +1,12 @@
-// Member Functions Prototypes
+// Functions Prototypes
 
-template < typename T, typename Alloc = std::allocator<T> >
+template < class T, class Alloc = std::allocator<T> >
 class vector {
 	// constructors
 	explicit	vector(const allocator_type& alloc = allocator_type());
 	explicit	vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 
-	template <typename InputIterator>
+	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 
 	vector(const vector& x);
@@ -53,7 +53,7 @@ class vector {
 
 	// modifiers 
 
-	template< typename InputIterator >
+	template< class InputIterator >
 	void	assign(InputIterator first, InputIterator last);
 
 	void	assign(size_type n, const value_type& val);
@@ -64,7 +64,7 @@ class vector {
 	iterator	insert(iterator position, const value_type& val);
 	void		insert(iterator position, size_type n, const value_type& val);
 
-	template< typename InputIterator>
+	template< class InputIterator>
 	void	insert(iterator position, InputIterator first, InputIterator last);
 
 	iterator	erase(iterator position);
@@ -72,4 +72,29 @@ class vector {
 
 	void	swap(vector& x);
 	void	clear();
+
+	//	allocator getter
+
+	allocator_type	get_allocator() const;
 };
+
+template< class T, class Alloc>
+bool	operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+template< class T, class Alloc>
+bool	operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+template< class T, class Alloc>
+bool	operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+template< class T, class Alloc>
+bool	operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+template< class T, class Alloc>
+bool	operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+template< class T, class Alloc>
+bool	operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+template< class T, class Alloc>
+void	swap(vector<T, Alloc>& x, vector<T, Alloc>& y);
