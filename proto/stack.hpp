@@ -16,3 +16,21 @@ class stack {
 	void	push(const value_type& val);
 	void	pop();
 };
+
+template< class T, class Container >
+bool	operator==(const stack<T, Container>& lhs, const stack<T, Container>& rhs);
+
+template< class T, class Container >
+bool	operator!=(const stack<T, Container>& lhs, const stack<T, Container>& rhs);
+
+template< class T, class Container >
+bool	operator<(const stack<T, Container>& lhs, const stack<T, Container>& rhs);
+
+template< class T, class Container >
+bool	operator<=(const stack<T, Container>& lhs, const stack<T, Container>& rhs);
+
+template< class T, class Container >
+bool	operator>(const stack<T, Container>& lhs, const stack<T, Container>& rhs);
+
+template< class T, class Container >
+bool	operator>=(const stack<T, Container>& lhs, const stack<T, Container>& rhs);
