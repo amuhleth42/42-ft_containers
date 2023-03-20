@@ -74,13 +74,13 @@ public:
 	reference		at(size_type n);
 	const_reference	at(size_type n) const;
 
-	reference		front();
-	const_reference	front() const;
-	reference		back();
-	const_reference	back() const;
+	reference		front()				{ return (*_data); }
+	const_reference	front() const;		{ return (*_data); }
+	reference		back();				{ return (*(_data + _size)); }
+	const_reference	back() const;		{ return (*(_data + _size)); }
 
-	value_type*			data();
-	const value_type*	data() const;
+	value_type*			data()			{ return _data; }
+	const value_type*	data() const	{ return _data; }
 
 	// modifiers 
 
@@ -106,7 +106,7 @@ public:
 
 	//	allocator getter
 
-	allocator_type	get_allocator() const;
+	allocator_type	get_allocator() const		{ return _alloc; }
 };
 
 template< class T, class Alloc>

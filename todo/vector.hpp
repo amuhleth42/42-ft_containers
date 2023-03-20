@@ -1,4 +1,4 @@
-// Functions Prototypes
+// Still left TODO in srcs/vector.hpp
 
 template < class T, class Alloc = std::allocator<T> >
 class vector {
@@ -27,13 +27,10 @@ class vector {
 	reference		at(size_type n);
 	const_reference	at(size_type n) const;
 
-	reference		front();
+	/*reference		front();
 	const_reference	front() const;
 	reference		back();
-	const_reference	back() const;
-
-	value_type*			data();
-	const value_type*	data() const;
+	const_reference	back() const;*/
 
 	// modifiers 
 
@@ -57,9 +54,6 @@ class vector {
 	void	swap(vector& x);
 	void	clear();
 
-	//	allocator getter
-
-	allocator_type	get_allocator() const;
 };
 
 template< class T, class Alloc>
