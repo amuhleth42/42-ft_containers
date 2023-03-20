@@ -12,7 +12,7 @@ class vector {
 	// capacity
 
 	void		resize(size_type n, value_type val = value_type());
-	void		reserve(size_type n);
+	//void		reserve(size_type n);
 
 	// element access
 
@@ -28,7 +28,7 @@ class vector {
 
 	void	assign(size_type n, const value_type& val);
 
-	void	push_back(const value_type& val);
+	//void	push_back(const value_type& val);
 	void	pop_back();
 
 	iterator	insert(iterator position, const value_type& val);

@@ -97,7 +97,25 @@ public:
 	void		resize(size_type n, value_type val = value_type());
 	size_type	capacity() const 		{ return _capacity; }
 	bool		empty() const 			{ return (_size == 0); }
-	void		reserve(size_type n);
+
+	void		reserve(size_type n)
+	{
+		if (n >= max_size())
+			throw std::length_error("impossible to allocate more than max_size()");
+		if (n < _capacity)
+			return ;
+
+		pointer	newData = _alloc.allocate(n);
+		
+		for (size_type i = 0 ; i < _size ; i++)
+		{
+			_alloc.construct(newData + i, _data[i]);
+			_alloc.destroy(_data + i);
+		}
+		_alloc.deallocate(_data, _capacity);
+		_capacity = n;
+		_data = newData;
+	}
 
 	// element access
 
@@ -134,7 +152,15 @@ public:
 
 	void	assign(size_type n, const value_type& val);
 
-	void	push_back(const value_type& val);
+	void	push_back(const value_type& val)
+	{
+		if (_size == _capacity)
+			reserve(_capacity == 0 ? 1 : _capacity * 2);
+
+		_alloc.construct(_data + _size, val);
+		_size++;
+	}
+
 	void	pop_back();
 
 	iterator	insert(iterator position, const value_type& val);
