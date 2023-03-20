@@ -3,15 +3,9 @@
 template < class T, class Alloc = std::allocator<T> >
 class vector {
 	// constructors
-	explicit	vector(const allocator_type& alloc = allocator_type());
-	explicit	vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 
 	template <class InputIterator>
 	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
-
-	vector(const vector& x);
-
-	~vector();
 
 	vector& operator=(const vector& x);
 
@@ -21,11 +15,6 @@ class vector {
 	void		reserve(size_type n);
 
 	// element access
-
-	reference		operator[](size_type n);
-	const_reference	operator[](size_type n) const;
-	reference		at(size_type n);
-	const_reference	at(size_type n) const;
 
 	/*reference		front();
 	const_reference	front() const;
@@ -52,8 +41,6 @@ class vector {
 	iterator	erase(iterator first, iterator last);
 
 	void	swap(vector& x);
-	void	clear();
-
 };
 
 template< class T, class Alloc>
