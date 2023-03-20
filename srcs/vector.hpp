@@ -56,8 +56,8 @@ public:
 			_alloc.construct(_data + i, val);
 	}
 
-	template <class InputIterator>
-	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+	//template <class InputIterator>
+	//vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 
 	vector(const vector& x) :
 		_alloc(x._alloc),
