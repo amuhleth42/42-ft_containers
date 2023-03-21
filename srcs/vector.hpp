@@ -56,8 +56,16 @@ public:
 			_alloc.construct(_data + i, val);
 	}
 
-	//template <class InputIterator>
-	//vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+	template <class InputIterator>
+	vector(typename ft::enable_if<!ft::is_integral<InputIterator::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type()) :
+		_alloc(alloc);
+		_size(ft::distance(first, last)),	// TODO
+		_capacity(_size),
+		_data(_alloc.allocate(_capacity))
+	{
+		for (size_type i = 0 i < _size ; i++, first++)
+			_alloc.construct(_data + i, *first);
+	}
 
 	vector(const vector& x) :
 		_alloc(x._alloc),
@@ -75,7 +83,21 @@ public:
 		_alloc.deallocate(_data, _capacity);
 	}
 
-	vector& operator=(const vector& x);
+	vector& operator=(const vector& x)
+	{
+		clear();
+		if (_capacity < x._capacity)
+		{
+			_alloc.deallocate(_data, _capacity);
+			_alloc = Allocator(x._alloc);
+			_capacity = x._capacity;
+			_data = _alloc.allocate(_capacity);
+		}
+		_size = x._size;
+		for (size_type i = 0 ; i < _size ; i++)
+			_alloc.construct(_data + i, x._data[i]);
+		return (*this);
+	}
 
 	// iterators
 
@@ -94,7 +116,18 @@ public:
 	size_type	size() const 			{ return _size; }
 	size_type	max_size() const		{ return _alloc.max_size(); }
 
-	void		resize(size_type n, value_type val = value_type());
+	void		resize(size_type n, value_type val = value_type())
+	{
+		if (n > _capacity)
+			reserve(n);
+		for (size_type i = _size ; i < n ; i++)
+			_alloc.construct(_data + i, val);
+		for (size_type i = _n ; i < _size ; i++)
+			_alloc.destroy(_data + i);
+		_size = n;
+	}
+	
+
 	size_type	capacity() const 		{ return _capacity; }
 	bool		empty() const 			{ return (_size == 0); }
 
@@ -178,7 +211,13 @@ public:
 	iterator	erase(iterator position);
 	iterator	erase(iterator first, iterator last);
 
-	void	swap(vector& x);
+	void	swap(vector& x)
+	{
+		std::swap(_size, x._size);
+		std::swap(_capacity, x._capacity);
+		std::swap(_data, x._data);
+		std::swap(_alloc, arg._alloc);
+	}
 
 	void	clear()
 	{

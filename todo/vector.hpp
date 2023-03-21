@@ -4,14 +4,14 @@ template < class T, class Alloc = std::allocator<T> >
 class vector {
 	// constructors
 
-	template <class InputIterator>
-	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+	//template <class InputIterator>
+	//vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 
-	vector& operator=(const vector& x);
+	//vector& operator=(const vector& x);
 
 	// capacity
 
-	void		resize(size_type n, value_type val = value_type());
+	//void		resize(size_type n, value_type val = value_type());
 	//void		reserve(size_type n);
 
 	// element access
@@ -29,7 +29,7 @@ class vector {
 	void	assign(size_type n, const value_type& val);
 
 	//void	push_back(const value_type& val);
-	void	pop_back();
+	//void	pop_back();
 
 	iterator	insert(iterator position, const value_type& val);
 	void		insert(iterator position, size_type n, const value_type& val);
@@ -40,7 +40,7 @@ class vector {
 	iterator	erase(iterator position);
 	iterator	erase(iterator first, iterator last);
 
-	void	swap(vector& x);
+	//void	swap(vector& x);
 };
 
 template< class T, class Alloc>
