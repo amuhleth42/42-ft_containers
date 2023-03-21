@@ -161,7 +161,13 @@ public:
 		_size++;
 	}
 
-	void	pop_back();
+	void	pop_back()
+	{
+		if (_size == 0)
+			return ;
+		_alloc.destroy(_data + _size - 1);
+		_size--;
+	}
 
 	iterator	insert(iterator position, const value_type& val);
 	void		insert(iterator position, size_type n, const value_type& val);
