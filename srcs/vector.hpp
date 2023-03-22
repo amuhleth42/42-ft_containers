@@ -6,6 +6,7 @@
 
 # include "iterator_tags.hpp"
 # include "type_traits.hpp"
+# include "algorithm.hpp"
 
 namespace	ft
 {
