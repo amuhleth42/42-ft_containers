@@ -1,6 +1,6 @@
 //class	vector;
 class	map;
-class	stack;
+//class	stack;
 
 //std::iterator_traits;
 std::reverse_iterator;
@@ -14,6 +14,8 @@ std::reverse_iterator;
 
 vector_iterator / random_access_iterator
 map_iterator / bidirectional_iterator
+
+binary_tree
 
 
 class	set;
