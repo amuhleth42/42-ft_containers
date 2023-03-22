@@ -232,8 +232,35 @@ public:
 	template< class InputIterator>
 	void	insert(iterator position, InputIterator first, InputIterator last);
 
-	iterator	erase(iterator position);
-	iterator	erase(iterator first, iterator last);
+	iterator	erase(iterator position)
+	{
+		for (iterator it(position) ; it < end() ; it++)
+			it[0] = it[1];
+		return (position);
+	}
+
+
+	iterator	erase(iterator first, iterator last)
+	{
+		if (first >= last)
+			return last;
+
+		difference_type	diff = last - first;
+		iterator	res;
+		for (iterator it = first ; it != last ; it++)
+			_alloc.destroy(it);
+		res = first;
+
+		while (last < end())
+		{
+			_alloc.construct(first, *last);
+			_alloc.destroy(last);
+			first++;
+			last++;
+		}
+		_size -= diff;
+		return res;
+	}
 
 	void	swap(vector& x)
 	{
