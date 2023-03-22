@@ -11,6 +11,7 @@ std::reverse_iterator;
 //std::pair
 //std::make_pair
 
+std::less
 
 vector_iterator / random_access_iterator
 map_iterator / bidirectional_iterator
