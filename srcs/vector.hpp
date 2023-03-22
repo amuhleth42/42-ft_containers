@@ -226,11 +226,73 @@ public:
 		_size--;
 	}
 
-	iterator	insert(iterator position, const value_type& val);
-	void		insert(iterator position, size_type n, const value_type& val);
+	iterator	insert(iterator position, const value_type& val)
+	{
+		size_type	pos = position - begin();
+
+		push_back(val);
+		for (size_type i = _size - 1 ; i > pos ; i--)
+			_data[i] = _data[i - 1];
+		_data[pos] = val;
+		return iterator(_data + pos);
+	}
+
+	void		insert(iterator position, size_type n, const value_type& val)
+	{
+		size_type	pos = position - begin();
+
+		if (_size + n > _capacity)
+			reserve(_size + n);
+
+		if (_size && pos != _size)
+		{
+			for (size_type i = _size - 1 ; i >= pos ; i--)
+			{
+				if (_size > i + n)
+					_alloc.destroy(_data + i + n);
+				_alloc.construct(_data + i + n, _data[i]);
+			}
+		}
+		for (size_type i = pos ; i < pos + n ; i++)
+		{
+			if (_size > i)
+				_alloc.destroy(_data + i);
+			_alloc.construct(_data + i, val);
+		}
+		_size += n;
+	}
 
 	template< class InputIterator>
-	void	insert(iterator position, InputIterator first, InputIterator last);
+	void	insert(iterator position,
+		typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+		InputIterator last)
+	{
+		if (first >= last)
+			return ;
+
+		size_type	n = last - first;
+		size_type	pos = position - begin();
+
+		if (_size + n > _capacity)
+			reserve(_size + n);
+
+		if (_size && pos != _size)
+		{
+			for (size_type i = _size - 1 ; i >= pos ; i--)
+			{
+				if (_size > i + n)
+					_alloc.destroy(_data + i + n);
+				_alloc.construct(_data + i + n, _data[i]);
+			}
+		}
+		for (size_type i = pos ; i < pos + n ; i++, first++)
+		{
+			if (_size > i)
+				_alloc.destroy(_data + i);
+			_alloc.construct(_data + i, *first);
+		}
+		_size += n;
+	}
 
 	iterator	erase(iterator position)
 	{
