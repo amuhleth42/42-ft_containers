@@ -5,6 +5,7 @@
 # include <iterator> // tmp
 
 # include "iterator_tags.hpp"
+# include "type_traits.hpp"
 
 namespace	ft
 {
@@ -57,13 +58,15 @@ public:
 	}
 
 	template <class InputIterator>
-	vector(typename ft::enable_if<!ft::is_integral<InputIterator::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type()) :
-		_alloc(alloc);
-		_size(ft::distance(first, last)),	// TODO
+	vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+			InputIterator last,
+			const allocator_type& alloc = allocator_type()) :
+		_alloc(alloc),
+		_size(std::distance(first, last)),	// TODO ft::distance, inside iterator.hpp
 		_capacity(_size),
 		_data(_alloc.allocate(_capacity))
 	{
-		for (size_type i = 0 i < _size ; i++, first++)
+		for (size_type i = 0 ; i < _size ; i++, first++)
 			_alloc.construct(_data + i, *first);
 	}
 
@@ -122,7 +125,7 @@ public:
 			reserve(n);
 		for (size_type i = _size ; i < n ; i++)
 			_alloc.construct(_data + i, val);
-		for (size_type i = _n ; i < _size ; i++)
+		for (size_type i = n ; i < _size ; i++)
 			_alloc.destroy(_data + i);
 		_size = n;
 	}
@@ -181,9 +184,30 @@ public:
 	// modifiers 
 
 	template< class InputIterator >
-	void	assign(InputIterator first, InputIterator last);
+	void	assign(InputIterator first, InputIterator last)
+	{
+		size_type n = std::distance(first, last);		// TODO ft::distance
 
-	void	assign(size_type n, const value_type& val);
+		if (n > _size)
+			reserve(n);
+		
+		for (size_type i = 0 ; i < _size ; i++)
+			_alloc.destroy(_data + i);
+		for (size_type i = 0 ; i < n ; i++, first++)
+			_alloc.construct(_data + i, *first);
+		_size = n;
+	}
+
+	void	assign(size_type n, const value_type& val)
+	{
+		if (n > _size)
+			reserve(n);
+		for (size_type i = 0 ; i < _size ; i++)
+			_alloc.destroy(_data + i);
+		for (size_type i = 0 ; i < n ; i++)
+			_alloc.construct(_data + i, val);
+		_size = n;
+	}
 
 	void	push_back(const value_type& val)
 	{
@@ -216,7 +240,7 @@ public:
 		std::swap(_size, x._size);
 		std::swap(_capacity, x._capacity);
 		std::swap(_data, x._data);
-		std::swap(_alloc, arg._alloc);
+		std::swap(_alloc, x._alloc);
 	}
 
 	void	clear()

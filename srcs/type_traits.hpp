@@ -25,7 +25,7 @@ struct	integral_constant
 
 	static const T	value = v;
 	operator	value_type(void) const { return value; } // implicit conversion operator !
-}
+};
 
 typedef	integral_constant<bool, true>	true_type;
 typedef	integral_constant<bool, false>	false_type;
