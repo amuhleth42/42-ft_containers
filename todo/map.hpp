@@ -46,17 +46,17 @@ class map {
 
 	//	modifiers
 
-	pair<iterator, bool>	insert(const value_type& val);
-	iterator	insert(iterator position, const value_type& val);
+	//pair<iterator, bool>	insert(const value_type& val);
+	//iterator	insert(iterator position, const value_type& val);
 
-	template< class InputIterator >
-	void	insert(InputIterator first, InputIterator last);
+	//template< class InputIterator >
+	//void	insert(InputIterator first, InputIterator last);
 
-	void		erase(iterator position);
-	size_type	erase(const key_type& k);
-	void		erase(iterator fist, iterator last);
+	//void		erase(iterator position);
+	//size_type	erase(const key_type& k);
+	//void		erase(iterator fist, iterator last);
 
-	void	swap(map& x);
+	//void	swap(map& x);
 	//void	clear();
 
 	//	observers

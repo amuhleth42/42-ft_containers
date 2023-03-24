@@ -6,6 +6,7 @@
 #include "type_traits.hpp"
 #include "functional.hpp"
 #include "RBTree.hpp"
+#include "iterator.hpp"
 
 #include <iterator>	// tmp
 
@@ -31,14 +32,6 @@ public:
 	typedef typename allocator_type::pointer			pointer;
 	typedef typename allocator_type::const_pointer		const_pointer;
 
-	typedef	typename tree::iterator					iterator;
-	typedef	typename tree::const_iterator			const_iterator;
-	typedef	typename tree::reverse_iterator			reverse_iterator;
-	typedef	typename tree::const_reverse_iterator	const_reverse_iterator;
-
-	typedef	typename iterator_traits<iterator>::difference_type	difference_type;
-	typedef	size_t												size_type;
-
 	class	value_compare : public binary_function<value_type, value_type, bool>
 	{
 		friend class map;
@@ -56,9 +49,18 @@ public:
 			return comp(x.first, y.first);
 		}
 
-	}	// class value_compare
+	};	// class value_compare
 
-	typedef	RBTree<value_type, value_compare, Allocator>	btree;
+	typedef	RBTree<value_type, value_compare, allocator_type>	btree;
+	
+	typedef	typename btree::iterator				iterator;
+	typedef	typename btree::const_iterator			const_iterator;
+	typedef	typename btree::reverse_iterator		reverse_iterator;
+	typedef	typename btree::const_reverse_iterator	const_reverse_iterator;
+	
+	//typedef	typename ft::iterator_traits<iterator>::difference_type	difference_type;
+	typedef	ptrdiff_t	difference_type;
+	typedef	size_t													size_type;
 
 private:
 
@@ -118,7 +120,7 @@ public:
 
 	mapped_type&	operator[](const key_type& k)
 	{
-		iterator	it = _tree.find(value_type(key, mapped_type()));
+		iterator	it = _tree.find(value_type(k, mapped_type()));
 
 		if (!it.getPtr())
 			_tree.insert(value_type(k, mapped_type())).first;
@@ -145,17 +147,42 @@ public:
 
 	//	modifiers
 
-	pair<iterator, bool>	insert(const value_type& val);
-	iterator	insert(iterator position, const value_type& val);
+	pair<iterator, bool>	insert(const value_type& val)
+	{
+		return _tree.insert(val);
+	}
+
+	iterator	insert(iterator position, const value_type& val)
+	{
+		return _tree.insert(position, val);
+	}
 
 	template< class InputIterator >
-	void	insert(InputIterator first, InputIterator last);
+	void	insert(InputIterator first, InputIterator last)
+	{
+		return _tree.insert(first, last);
+	}
 
-	void		erase(iterator position);
-	size_type	erase(const key_type& k);
-	void		erase(iterator fist, iterator last);
+	void		erase(iterator position)
+	{
+		_tree.erase(position);
+	}
 
-	void	swap(map& x);
+	size_type	erase(const key_type& k)
+	{
+		return _tree.erase(value_type(k, mapped_type()));
+	}
+
+	void		erase(iterator first, iterator last)
+	{
+		return _tree.erase(first, last);
+	}
+
+	void	swap(map& x)
+	{
+		_tree.swap(x._tree);
+	}
+
 	void	clear()
 	{
 		_tree.clear();
@@ -205,7 +232,7 @@ public:
 	{
 		return _tree.equal_range(value_type(k, mapped_type()));
 	}
-	pair<const_iterator, const_iterator>	equal_range(const key_type& k)
+	pair<const_iterator, const_iterator>	equal_range(const key_type& k) const
 	{
 		return _tree.equal_range(value_type(k, mapped_type()));
 	}

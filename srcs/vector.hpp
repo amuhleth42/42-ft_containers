@@ -5,7 +5,6 @@
 # include <iterator> // tmp
 # include "utility.hpp"	// tmp aussi
 
-# include "iterator_tags.hpp"
 # include "iterator.hpp"
 # include "type_traits.hpp"
 # include "algorithm.hpp"
@@ -30,7 +29,7 @@ public:
 	typedef	std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	//typedef	ptrdiff_t	difference_type;
-	typedef	typename iterator_traits<iterator>::difference_type	difference_type;
+	typedef	typename ft::iterator_traits<iterator>::difference_type	difference_type;
 	typedef	size_t	size_type;
 
 private:

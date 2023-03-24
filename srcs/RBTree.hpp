@@ -2,109 +2,42 @@
 # define RB_TREE_HPP
 
 # include <memory>
+# include "RBNode.hpp"
+# include "iterator.hpp"
 
 namespace	ft
 {
-
-template< class T >
-struct	RBNode {
-
-public:
-	typedef	T		value_type;
-	typedef	T&		reference;
-	typedef	T*		pointer;
-	typedef	RBNode*	node_ptr;
-	typedef	enum {BLACK, RED}	color_type;
-
-	value_type	content;
-	color_type	color;
-	node_ptr		parent;
-	node_ptr		left;
-	node_ptr		right;
-
-	RBNode(const value_type& content = value_type(),
-			color_type color = BLACK,
-			node_ptr parent = NULL,
-			node_ptr left = NULL,
-			node_ptr right = NULL) :
-		content(content),
-		parent(parent),
-		color(color),
-		left(left),
-		right(right)
-	{}
-
-	~RBNode() {}
-
-	reference	operator*(void) const	{ return content; }
-	pointer		operator->(void) const	{ return &content; }
-
-	// todo ?
-	
-	bool	operator==(const RBNode& rhs)
-	{
-		return (parent == rhs.parent && left == rhs.left && right == rhs.right);
-	}
-	bool	operator!=(const RBNode& rhs);
-	{
-		return !(*this == rhs);
-	}
-
-	node_ptr	min(void)
-	{
-		if (left)
-			return left->min();
-		return this;
-	}
-	node_ptr	max(void)
-	{
-		if (right)
-			return right->max();
-		return this;
-	}
-	node_ptr	previous(void)
-	{
-		if (left)
-			return left->max();
-
-		node_ptr	n = this;
-		node_ptr	p = n->parent;
-
-		while (p && n == p->left)
-		{
-			n = p;
-			p = p->parent;
-		}
-		return p;
-
-	}
-	node_ptr	next(void)
-	{
-		if (right)
-			return right->min();
-
-		node_ptr	n = this;
-		node_ptr	p = n->parent;
-
-		while (p && n == p->right)
-		{
-			n = p;
-			p = p->parent;
-		}
-		return p;
-	}
-
-};
-
-
 
 template< class T, class Compare = ft::less<T>, class Alloc = std::allocator<T> >
 class	RBTree
 {
 
 public:
-	typedef	struct	RBNode	node_type;
-	typedef	struct	RBNode*	node_ptr;
+	typedef	RBNode<T>	node_type;
+	typedef	RBNode<T>*	node_ptr;
+
+	typedef	T			value_type;
+
+	typedef	Compare		key_compare;
+	typedef	Alloc		allocator_type;
+
+	typedef	typename allocator_type::reference			reference;
+	typedef	typename allocator_type::const_reference	const_reference;
+	typedef	typename allocator_type::pointer			pointer;
+	typedef	typename allocator_type::const_pointer		const_pointer;
+
+	//tmp
+	//typedef	std::iterator<ft::bidirectional_iterator_tag, T>		iterator;
+	//typedef	std::iterator<ft::bidirectional_iterator_tag, const T>	const_iterator;
+	typedef	std::iterator<ft::bidirectional_iterator_tag, T>		iterator;
+	typedef	std::iterator<ft::bidirectional_iterator_tag, const T>	const_iterator;
+
+	typedef std::reverse_iterator<iterator>			reverse_iterator;
+	typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+	typedef	size_t		size_type;
+	typedef	ptrdiff_t	difference_type;
+
 
 private:
 	node_ptr	newNode(const_reference content);
@@ -113,7 +46,7 @@ private:
 	void	leftRotate(node_ptr n);
 	void	rightRotate(node_ptr n);
 
-	void	insertFix(note_ptr newNode);
+	void	insertFix(node_ptr newNode);
 	void	deleteFix(node_ptr x);
 
 	void	transplant(node_ptr x, node_ptr y);
