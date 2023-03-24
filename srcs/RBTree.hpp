@@ -21,6 +21,8 @@ public:
 	typedef	Compare		key_compare;
 	typedef	Alloc		allocator_type;
 
+	typedef	typename Alloc::template rebind<node_type>::other	allocator_node;
+
 	typedef	typename allocator_type::reference			reference;
 	typedef	typename allocator_type::const_reference	const_reference;
 	typedef	typename allocator_type::pointer			pointer;
@@ -51,7 +53,7 @@ private:
 
 	void	transplant(node_ptr x, node_ptr y);
 
-	void	clearNode(RBNodeAllocator& alloc, node_ptr n) const;
+	void	clearNode(allocator_node& alloc, node_ptr n) const;
 
 	node_ptr	_getNode(const_reference k) const;
 
