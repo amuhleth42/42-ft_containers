@@ -56,12 +56,9 @@ public:
 			return comp(x.first, y.first);
 		}
 
-	}
+	}	// class value_compare
 
-
-
-
-
+private:
 
 
 public:
@@ -79,21 +76,21 @@ public:
 
 	// iterators
 
-	iterator		begin();
-	const_iterator	begin() const
-	iterator		end();
-	const_iterator	end() const
+	iterator		begin()				{ return _tree.begin(); }
+	const_iterator	begin() const		{ return _tree.begin(); }
+	iterator		end()				{ return _tree.end(); }
+	const_iterator	end() const			{ return _tree.end(); }
 
-	reverse_iterator		rbegin();
-	const_reverse_iterator	rbegin() const;
-	reverse_iterator		rend();
-	const_reverse_iterator	rend() const;
+	reverse_iterator		rbegin()			{ return _tree.rbegin(); }
+	const_reverse_iterator	rbegin() const		{ return _tree.rbegin(); }
+	reverse_iterator		rend()				{ return _tree.rend(); }
+	const_reverse_iterator	rend() const		{ return _tree.rend(); }
 
 	//	capacity
 
-	bool		empty() const;
-	size_type	size() const;
-	size_type	max_size() const;
+	bool		empty() const		{ return _tree.size() == 0; }
+	size_type	size() const		{ return _tree.size(); }
+	size_type	max_size() const	{ return _tree.max_size(); }
 
 	// element access
 
