@@ -8,41 +8,41 @@ template<
 class map {
 
 	//constructors
-	explicit	map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+	//explicit	map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
 
-	template< class InputIterator>
-	map(InputIterator first, InputIterator last, const key_compare comp = key_compare(), const allocator_type& alloc = allocator_type());
+	//template< class InputIterator>
+	//map(InputIterator first, InputIterator last, const key_compare comp = key_compare(), const allocator_type& alloc = allocator_type());
 
-	map(const map& x);
+	//map(const map& x);
 	
-	~map();
+	//~map();
 
-	map&	operator=(const map& x);
+	//map&	operator=(const map& x);
 
 	// iterators
 
-	iterator		begin();
-	const_iterator	begin() const
-	iterator		end();
-	const_iterator	end() const
+	//iterator		begin();
+	//const_iterator	begin() const
+	//iterator		end();
+	//const_iterator	end() const
 
-	reverse_iterator		rbegin();
-	const_reverse_iterator	rbegin() const;
-	reverse_iterator		rend();
-	const_reverse_iterator	rend() const;
+	//reverse_iterator		rbegin();
+	//const_reverse_iterator	rbegin() const;
+	//reverse_iterator		rend();
+	//const_reverse_iterator	rend() const;
 
 	//	capacity
 
-	bool		empty() const;
-	size_type	size() const;
-	size_type	max_size() const;
+	//bool		empty() const;
+	//size_type	size() const;
+	//size_type	max_size() const;
 
 	// element access
 
-	mapped_type&	operator[](const key_type& k);
+	//mapped_type&	operator[](const key_type& k);
 
-	mapped_type*		at(const key_type& k);
-	const mapped_type&	at(const key_type& k) const;
+	//mapped_type*		at(const key_type& k);
+	//const mapped_type&	at(const key_type& k) const;
 
 	//	modifiers
 
@@ -57,31 +57,31 @@ class map {
 	void		erase(iterator fist, iterator last);
 
 	void	swap(map& x);
-	void	clear();
+	//void	clear();
 
 	//	observers
 
-	key_compare		key_comp() const;
-	value_compare	value_comp() const;
+	//key_compare		key_comp() const;
+	//value_compare	value_comp() const;
 
 	//	operations
 
-	iterator		find(const key_type& k);
-	const_iterator	find(const key_type& k) const;
+	//iterator		find(const key_type& k);
+	//const_iterator	find(const key_type& k) const;
 
-	size_type	count(const key_type* k) const;
+	//size_type	count(const key_type* k) const;
 
-	iterator		lower_bound(const key_type& k);
-	const_iterator	lower_bound(const key_type& k) const;
+	//iterator		lower_bound(const key_type& k);
+	//const_iterator	lower_bound(const key_type& k) const;
 
-	iterator		upper_bound(const key_type& k);
-	const_iterator	upper_bound(const key_type& k) const;
+	//iterator		upper_bound(const key_type& k);
+	//const_iterator	upper_bound(const key_type& k) const;
 
-	pair<iterator, iterator>				equal_range(const key_type& k);
-	pair<const_iterator, const_iterator>	equal_range(const key_type& k);
+	//pair<iterator, iterator>				equal_range(const key_type& k);
+	//pair<const_iterator, const_iterator>	equal_range(const key_type& k);
 
 	//	allocator getter
 
-	allocator_type	get_allocator() const;
+	//allocator_type	get_allocator() const;
 
 };

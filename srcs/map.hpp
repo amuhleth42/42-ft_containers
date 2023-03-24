@@ -58,21 +58,43 @@ public:
 
 	}	// class value_compare
 
+	typedef	RBTree<value_type, value_compare, Allocator>	btree;
+
 private:
+
+	btree	_tree;
 
 
 public:
 	//constructors
-	explicit	map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+
+	explicit	map(const key_compare& comp = key_compare(),
+					const allocator_type& alloc = allocator_type()) :
+		_tree(btree(value_compare(comp), alloc))
+	{}
 
 	template< class InputIterator>
-	map(InputIterator first, InputIterator last, const key_compare comp = key_compare(), const allocator_type& alloc = allocator_type());
+	map(InputIterator first, InputIterator last,
+			const key_compare comp = key_compare(),
+			const allocator_type& alloc = allocator_type()) :
+		_tree(btree(first, last, value_compare(comp), alloc))
+	{}
 
-	map(const map& x);
+	map(const map& x) :
+		_tree(btree(x.begin(), x.end(), x.key_comp(), x.get_allocator()))
+	{}
 	
-	~map();
+	~map()
+	{
+		_tree.clear();
+	}
 
-	map&	operator=(const map& x);
+	map&	operator=(const map& x)
+	{
+		if (this != &x)
+			_tree = x._tree;
+		return *this;
+	}
 
 	// iterators
 
@@ -94,10 +116,32 @@ public:
 
 	// element access
 
-	mapped_type&	operator[](const key_type& k);
+	mapped_type&	operator[](const key_type& k)
+	{
+		iterator	it = _tree.find(value_type(key, mapped_type()));
 
-	mapped_type*		at(const key_type& k);
-	const mapped_type&	at(const key_type& k) const;
+		if (!it.getPtr())
+			_tree.insert(value_type(k, mapped_type())).first;
+		return it->second;
+	}
+
+	mapped_type&		at(const key_type& k)
+	{
+		iterator	it = _tree.find(value_type(k, mapped_type()));
+
+		if (it.getPtr())
+			return it->second;
+		throw std::out_of_range("ft::map::at out of range");
+	}
+
+	const mapped_type&	at(const key_type& k) const
+	{
+		iterator	it = _tree.find(value_type(k, mapped_type()));
+
+		if (it.getPtr())
+			return it->second;
+		throw std::out_of_range("ft::map::at out of range");
+	}
 
 	//	modifiers
 
@@ -112,32 +156,63 @@ public:
 	void		erase(iterator fist, iterator last);
 
 	void	swap(map& x);
-	void	clear();
+	void	clear()
+	{
+		_tree.clear();
+	}
 
 	//	observers
 
-	key_compare		key_comp() const;
-	value_compare	value_comp() const;
+	key_compare		key_comp() const		{ return key_compare(); }
+	value_compare	value_comp() const		{ return value_compare(); }
 
 	//	operations
 
-	iterator		find(const key_type& k);
-	const_iterator	find(const key_type& k) const;
+	iterator		find(const key_type& k)
+	{
+		return _tree.find(value_type(k, mapped_type()));
+	}
 
-	size_type	count(const key_type* k) const;
+	const_iterator	find(const key_type& k) const
+	{
+		return _tree.find(value_type(k, mapped_type()));
+	}
 
-	iterator		lower_bound(const key_type& k);
-	const_iterator	lower_bound(const key_type& k) const;
+	size_type	count(const key_type* k) const
+	{
+		return _tree.count(value_type(k, mapped_type()));
+	}
 
-	iterator		upper_bound(const key_type& k);
-	const_iterator	upper_bound(const key_type& k) const;
+	iterator		lower_bound(const key_type& k)
+	{
+		return _tree.lower_bound(value_type(k, mapped_type()));
+	}
+	const_iterator	lower_bound(const key_type& k) const
+	{
+		return _tree.lower_bound(value_type(k, mapped_type()));
+	}
 
-	pair<iterator, iterator>				equal_range(const key_type& k);
-	pair<const_iterator, const_iterator>	equal_range(const key_type& k);
+	iterator		upper_bound(const key_type& k)
+	{
+		return _tree.upper_bound(value_type(k, mapped_type()));
+	}
+	const_iterator	upper_bound(const key_type& k) const
+	{
+		return _tree.upper_bound(value_type(k, mapped_type()));
+	}
+
+	pair<iterator, iterator>				equal_range(const key_type& k)
+	{
+		return _tree.equal_range(value_type(k, mapped_type()));
+	}
+	pair<const_iterator, const_iterator>	equal_range(const key_type& k)
+	{
+		return _tree.equal_range(value_type(k, mapped_type()));
+	}
 
 	//	allocator getter
 
-	allocator_type	get_allocator() const;
+	allocator_type	get_allocator() const		{ return allocator_type(); }
 
 };
 
