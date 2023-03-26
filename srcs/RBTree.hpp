@@ -41,8 +41,8 @@ public:
 	typedef	ptrdiff_t	difference_type;
 
 private:
-	allocator		_node;
-	node_allocator	_nalloc;
+	allocator		_alloc;
+	node_allocator	_node;
 	key_compare		_comp;
 	
 	node_ptr	_root;
@@ -56,6 +56,12 @@ private:
 		node_ptr	n = _node.allocate(1);
 		_node.construct(n, node_type(content));
 		return n;
+	}
+
+	void	deleteNode(node_ptr n)
+	{
+		_node.destroy(n);
+		_node.deallocate(n, 1);
 	}
 
 	node_ptr	getRoot() const			{ return _root; }
@@ -79,7 +85,16 @@ private:
 			y->p = x->p;
 	}
 
-	void	clearNode(allocator_node& alloc, node_ptr n) const;
+	void	clearFrom(node_ptr n) const
+	{
+		if (!n)
+			return ;
+		if (n->left)
+			clearFrom(n->left);
+		if (n->right)
+			clearFrom(n->right);
+		deleteNode(n);
+	}
 
 	node_ptr	_getNode(const_reference k) const;
 

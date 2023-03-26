@@ -53,13 +53,12 @@ private:
 
 	//void	transplant(node_ptr x, node_ptr y);
 
-	void	clearNode(allocator_node& alloc, node_ptr n) const;
+	//void	clearNode(allocator_node& alloc, node_ptr n) const;
 
 	node_ptr	_getNode(const_reference k) const;
 
 	iterator	insertNode(const_reference k, node_ptr hint = NULL);
-
-	int	deleteNode(const node_ptr toDelete);
+	int			deleteNode(const node_ptr toDelete);
 
 public:
 	RBTree();
