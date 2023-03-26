@@ -40,25 +40,10 @@ public:
 	typedef	size_t		size_type;
 	typedef	ptrdiff_t	difference_type;
 
-private:
-	allocator		_node;
-	node_allocator	_nalloc;
-	key_compare		_comp;
-	
-	node_ptr	_root;
-	node_ptr	_first;
-	node_ptr	_last;
-	size_type	_size;
 
 private:
-	node_ptr	newNode(const_reference content)
-	{
-		node_ptr	n = _node.allocate(1);
-		_node.construct(n, node_type(content));
-		return n;
-	}
-
-	node_ptr	getRoot() const			{ return _root; }
+	//node_ptr	newNode(const_reference content);
+	//node_ptr	getRoot() const;
 	
 	void	leftRotate(node_ptr n);
 	void	rightRotate(node_ptr n);
@@ -66,18 +51,7 @@ private:
 	void	insertFix(node_ptr newNode);
 	void	deleteFix(node_ptr x);
 
-	void	transplant(node_ptr x, node_ptr y)
-	{
-		if (x->p == NULL)
-			_root = y;
-		else if (x->p->left == x)
-			x->p->left = y;
-		else
-			x->p->right = y;
-
-		if (y)
-			y->p = x->p;
-	}
+	//void	transplant(node_ptr x, node_ptr y);
 
 	void	clearNode(allocator_node& alloc, node_ptr n) const;
 
@@ -153,6 +127,14 @@ public:
 	const_reverse_iterator	rend() const;
 
 };
+
+
+
+
+
+
+
+
 
 
 

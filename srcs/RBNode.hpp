@@ -16,17 +16,17 @@ public:
 
 	value_type	content;
 	color_type	color;
-	node_ptr		parent;
+	node_ptr		p;
 	node_ptr		left;
 	node_ptr		right;
 
 	RBNode(const value_type& content = value_type(),
 			color_type color = BLACK,
-			node_ptr parent = NULL,
+			node_ptr p = NULL,
 			node_ptr left = NULL,
 			node_ptr right = NULL) :
 		content(content),
-		parent(parent),
+		p(p),
 		color(color),
 		left(left),
 		right(right)
@@ -41,7 +41,7 @@ public:
 
 	bool	operator==(const RBNode& rhs)
 	{
-		return (parent == rhs.parent && left == rhs.left && right == rhs.right);
+		return (p == rhs.p && left == rhs.left && right == rhs.right);
 	}
 	bool	operator!=(const RBNode& rhs)
 	{
@@ -66,12 +66,12 @@ public:
 			return left->max();
 
 		node_ptr	n = this;
-		node_ptr	p = n->parent;
+		node_ptr	p = n->p;
 
 		while (p && n == p->left)
 		{
 			n = p;
-			p = p->parent;
+			p = p->p;
 		}
 		return p;
 
@@ -82,12 +82,12 @@ public:
 			return right->min();
 
 		node_ptr	n = this;
-		node_ptr	p = n->parent;
+		node_ptr	p = n->p;
 
 		while (p && n == p->right)
 		{
 			n = p;
-			p = p->parent;
+			p = p->p;
 		}
 		return p;
 	}
