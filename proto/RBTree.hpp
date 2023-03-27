@@ -45,8 +45,8 @@ private:
 	//node_ptr	newNode(const_reference content);
 	//node_ptr	getRoot() const;
 	
-	void	leftRotate(node_ptr n);
-	void	rightRotate(node_ptr n);
+	//void	leftRotate(node_ptr n);
+	//void	rightRotate(node_ptr n);
 
 	void	insertFix(node_ptr newNode);
 	void	deleteFix(node_ptr x);

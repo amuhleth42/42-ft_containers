@@ -66,8 +66,47 @@ private:
 
 	node_ptr	getRoot() const			{ return _root; }
 	
-	void	leftRotate(node_ptr n);
-	void	rightRotate(node_ptr n);
+	void	leftRotate(node_ptr n)
+	{
+		node_ptr	x = n;
+		node_ptr	y = n->right;
+		node_ptr	p = x->p;
+		node_ptr	b = y->left;
+
+		n->right = b;
+		if (b)
+			b->p = x;
+		y->p = p;
+		if (!p)
+			_root = y;
+		else if (x == p->left)
+			p->left = y;
+		else
+			p->right = y;
+		y->left = x;
+		x->p = y;
+	}
+
+	void	rightRotate(node_ptr n)
+	{
+		node_ptr	x = n->left;
+		node_ptr	y = n;
+		node_ptr	p = y->p;
+		node_ptr	b = x->right;
+
+		x->right = y;
+		if (b)
+			b->p = y;
+		x->p = p;
+		if (!p)
+			_root = x;
+		else if (p->right == y)
+			p->right = x;
+		else
+			p->left = x;
+		y->left = b;
+		y->p = x;
+	}
 
 	void	insertFix(node_ptr newNode);
 	void	deleteFix(node_ptr x);
