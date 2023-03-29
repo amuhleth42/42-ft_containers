@@ -1,26 +1,8 @@
 #ifndef VECTOR_ITERATOR_HPP
 # define VECTOR_ITERATOR_HPP
 
-namespace	ft
-{
-
 template< typename T >
 class	vector_iterator {
-
-public:
-	typedef	ptrdiff_t	difference_type;
-	typedef	T			value_type;
-	typedef	T*			pointer;
-	typedef	T&			reference;
-
-	typedef	vector_iterator<const T>	const_iterator;
-	typedef	ft::random_access_tag		iterator_category;
-
-
-private:
-	pointer	_p;
-
-public:
 
 	vector_iterator();
 	vector_iterator(pointer p);
@@ -57,8 +39,5 @@ public:
 	vector_iterator	operator-=(difference_type n);
 
 };
-
-
-}		// namespace ft
 
 #endif

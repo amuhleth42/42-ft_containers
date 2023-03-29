@@ -41,6 +41,31 @@ struct	iterator_traits< const T* >
 	typedef	ft::random_access_iterator_tag	iterator_cateory;
 };
 
+template< class Category,
+			class T,
+			class Distance = ptrdiff_t,
+			class Pointer = T*,
+			class Reference = T& >
+
+class	iterator {
+public :
+	typedef	T			value_type;
+	typedef	Distance	difference_type;
+	typedef	Pointer		pointer;
+	typedef	Reference	reference;
+	typedef	Category	iterator_category;
+};
+
+template< class InputIt >
+typename InputIt::difference_type	distance(InputIt first, InputIt last)
+{
+	typename InputIt::difference_type	n = 0;
+
+	for (; first != last ; n++, first++);
+
+	return n;
+}
+
 }		//	namespace ft
 
 #endif

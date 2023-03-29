@@ -2,12 +2,12 @@
 # define VECTOR_HPP
 
 # include <memory>
-# include <iterator> // tmp
+//# include <iterator> // tmp
 # include "utility.hpp"	// tmp aussi
 
-# include "iterator.hpp"
 # include "type_traits.hpp"
 # include "algorithm.hpp"
+# include "vector_iterator.hpp"
 
 namespace	ft
 {
@@ -23,10 +23,10 @@ public:
 	typedef typename allocator_type::pointer		pointer;
 	typedef typename allocator_type::const_pointer	const_pointer;
 
-	typedef	std::iterator<ft::random_access_iterator_tag, T>		iterator;
-	typedef	std::iterator<ft::random_access_iterator_tag, const T>	const_iterator;
-	typedef	std::reverse_iterator<iterator>	reverse_iterator;
-	typedef	std::reverse_iterator<const_iterator>	const_reverse_iterator;
+	typedef	ft::vector_iterator<T>					iterator;
+	typedef	ft::vector_iterator<const T>			const_iterator;
+	typedef	ft::reverse_iterator<iterator>			reverse_iterator;
+	typedef	ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	//typedef	ptrdiff_t	difference_type;
 	typedef	typename ft::iterator_traits<iterator>::difference_type	difference_type;
@@ -64,7 +64,7 @@ public:
 			InputIterator last,
 			const allocator_type& alloc = allocator_type()) :
 		_alloc(alloc),
-		_size(std::distance(first, last)),	// TODO ft::distance, inside iterator.hpp
+		_size(ft::distance(first, last)),
 		_capacity(_size),
 		_data(_alloc.allocate(_capacity))
 	{
@@ -91,10 +91,10 @@ public:
 	vector& operator=(const vector& x)
 	{
 		clear();
-		if (_capacity < x._capacity)
+		if (_capacity < x._capacity || _alloc != x._alloc)
 		{
 			_alloc.deallocate(_data, _capacity);
-			_alloc = Allocator(x._alloc);
+			_alloc = Alloc(x._alloc);
 			_capacity = x._capacity;
 			_data = _alloc.allocate(_capacity);
 		}
@@ -177,18 +177,19 @@ public:
 
 	reference		front()				{ return (_data[0]); }
 	const_reference	front() const		{ return (_data[0]); }
-	reference		back()				{ return (_data[_size]); }
-	const_reference	back() const		{ return (_data[_size]); }
+	reference		back()				{ return (_data[_size - 1]); }
+	const_reference	back() const		{ return (_data[_size - 1]); }
 
 	value_type*			data()			{ return _data; }
 	const value_type*	data() const	{ return _data; }
 
 	// modifiers 
 
-	template< class InputIterator >
-	void	assign(InputIterator first, InputIterator last)
+	template< class InputIt >
+	void	assign(InputIt first,
+					typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last)
 	{
-		size_type n = std::distance(first, last);		// TODO ft::distance
+		size_type n = ft::distance(first, last);
 
 		if (n > _size)
 			reserve(n);
@@ -253,6 +254,8 @@ public:
 				if (_size > i + n)
 					_alloc.destroy(_data + i + n);
 				_alloc.construct(_data + i + n, _data[i]);
+				if (i == 0)
+					break ;
 			}
 		}
 		for (size_type i = pos ; i < pos + n ; i++)
@@ -285,6 +288,8 @@ public:
 				if (_size > i + n)
 					_alloc.destroy(_data + i + n);
 				_alloc.construct(_data + i + n, _data[i]);
+				if (i == 0)
+					break ;
 			}
 		}
 		for (size_type i = pos ; i < pos + n ; i++, first++)
@@ -298,6 +303,11 @@ public:
 
 	iterator	erase(iterator position)
 	{
+		if (!position.getPtr())
+			return position;
+		_alloc.destroy(position.getPtr());
+
+		_size--;
 		for (iterator it(position) ; it < end() ; it++)
 			it[0] = it[1];
 		return (position);
@@ -312,13 +322,13 @@ public:
 		difference_type	diff = last - first;
 		iterator	res;
 		for (iterator it = first ; it != last ; it++)
-			_alloc.destroy(it);
+			_alloc.destroy(it.getPtr());
 		res = first;
 
 		while (last < end())
 		{
-			_alloc.construct(first, *last);
-			_alloc.destroy(last);
+			_alloc.construct(first.getPtr(), *last);
+			_alloc.destroy(last.getPtr());
 			first++;
 			last++;
 		}
