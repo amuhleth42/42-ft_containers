@@ -48,22 +48,22 @@ private:
 	size_type	_size;
 
 private:
-	node_ptr	newNode(const_reference content)
+	node_ptr	_newNode(const_reference content)
 	{
 		node_ptr	n = _node.allocate(1);
 		_node.construct(n, node_type(content));
 		return n;
 	}
 
-	void	deleteNode(node_ptr n)
+	void	_clearNode(node_ptr n)
 	{
 		_node.destroy(n);
 		_node.deallocate(n, 1);
 	}
 
-	node_ptr	getRoot() const			{ return _root; }
+	node_ptr	_getRoot() const			{ return _root; }
 	
-	void	leftRotate(node_ptr n)
+	void	_leftRotate(node_ptr n)
 	{
 		node_ptr	x = n;
 		node_ptr	y = n->right;
@@ -84,7 +84,7 @@ private:
 		x->p = y;
 	}
 
-	void	rightRotate(node_ptr n)
+	void	_rightRotate(node_ptr n)
 	{
 		node_ptr	x = n->left;
 		node_ptr	y = n;
@@ -105,10 +105,10 @@ private:
 		y->p = x;
 	}
 
-	void	insertFix(node_ptr newNode);
-	void	deleteFix(node_ptr x);
+	void	_insertFix(node_ptr newNode);
+	void	_deleteFix(node_ptr x);
 
-	void	transplant(node_ptr x, node_ptr y)
+	void	_transplant(node_ptr x, node_ptr y)
 	{
 		if (x->p == NULL)
 			_root = y;
@@ -121,48 +121,124 @@ private:
 			y->p = x->p;
 	}
 
-	void	clearFrom(node_ptr n) const
+	void	_clearFrom(node_ptr n) const
 	{
 		if (!n)
 			return ;
 		if (n->left)
-			clearFrom(n->left);
+			_clearFrom(n->left);
 		if (n->right)
-			clearFrom(n->right);
-		deleteNode(n);
+			_clearFrom(n->right);
+		_clearNode(n);
 	}
 
-	node_ptr	_getNode(const_reference k) const;
+	node_ptr	_findNode(const_reference k) const
+	{
+		node_ptr	ptr = _root;
 
-	iterator	insertNode(const_reference k, node_ptr hint = NULL);
+		while (ptr)
+		{
+			if (!_comp(k, ptr->content) && !_comp(ptr->content, k))
+				return ptr;
+			if (_comp(k, ptr->content))
+				ptr = ptr->left;
+			else
+				ptr = ptr->right;
+		}
+		return ptr;
+	}
 
-	//int	deleteNode(const node_ptr toDelete);
+	iterator	_insertNode(const_reference k, node_ptr hint = NULL);
+
+	int	_deleteNode(const node_ptr toDelete);
 
 public:
-	RBTree();
+	RBTree() :
+		_alloc(allocator_type()),
+		_node(node_allocator()),
+		_comp(key_compare()),
+		_root(NULL),
+		_first(NULL),
+		_last(NULL),
+		_size(0)
+	{}
 
-	explicit RBTree(...);
+	explicit RBTree(const key_compare& comp, const allocator_type alloc = allocator_type()) :
+		_alloc(alloc),
+		_node(node_allocator(allocator_type())),
+		_comp(comp),
+		_root(NULL),
+		_first(NULL),
+		_last(NULL),
+		_size(0)
+	{}
 
-	template< class InputIterator >
-	RBTree(...);
+	template< class InputIt >
+	RBTree(InputIt first, InputIt last,
+		const key_compare& comp = key_compare(),
+		const allocator_type& alloc = allocator_type()) :
+		_alloc(alloc),
+		_node(node_allocator(allocator_type())),
+		_comp(comp),
+		_root(NULL),
+		_first(NULL),
+		_last(NULL),
+		_size(0)
+	{
+		insert(first, last);
+	}
 
-	RBTree(const RBTree& src);
 
-	~RBTree();
+	RBTree(const RBTree& src) :
+		_alloc(src._alloc),
+		_node(src._node),
+		_comp(src._comp),
+		_root(NULL),
+		_first(NULL),
+		_last(NULL),
+		_size(0)
+	{
+		insert(src.begin(), src.end());
+	}
 
-	RBTree&	operator=(const RBTree& rhs);
+	~RBTree()
+	{
+		clear();
+	}
 
-	allocator_type	get_allocator() const;
+	RBTree&	operator=(const RBTree& rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		clear();
+		_alloc = rhs._alloc;
+		_node = rhs._node;
+		_comp = rhs._comp;
+		insert(rhs.begin(), rhs.end());
+		_first = _root ? _root->min() : NULL;
+		_last = _root ? _root->max() : NULL;
+		return *this;
+	}
+
+	allocator_type	get_allocator() const		{ return _alloc; }
 
 	//	capacity
 	
-	bool	empty() const;
-	size_type	size() const;
-	size_type	max_size() const;
+	bool	empty() const			{ return _size == 0; }
+	size_type	size() const		{ return _size; }
+	size_type	max_size() const	{ return _node.max_size(); }
 
 	//	modifiers
 
-	void	clear();
+	void	clear()
+	{
+		_size = 0;
+		if (!_root)
+			return ;
+		_clearFrom(_root);
+		_root = NULL;
+	}
 
 	ft::pair<iterator, bool>	insert(const_reference value);
 	iterator	insert(iterator hint, const_reference value);
@@ -178,10 +254,23 @@ public:
 
 	//	lookup
 
-	size_type	count( const_reference key) const;
+	size_type	count( const_reference key) const
+	{
+		if (findNode(key))
+			return 1;
+		else
+			return 0;
+	}
 
-	iterator	find(const_reference key);
-	const_iterator	find(const_reference key) const;
+	iterator	find(const_reference key)
+	{
+		return iterator(_findNode(key), _root);
+	}
+
+	const_iterator	find(const_reference key) const
+	{
+		return const_iterator(_findNode(key), _root);
+	}
 
 	iterator	lower_bound(const_reference key);
 	const_iterator	lower_bound(const_reference key) const;
@@ -193,15 +282,15 @@ public:
 
 	key_compare	key_comp() const;
 
-	iterator		begin();
-	const_iterator	begin() const;
-	iterator		end();
-	const_iterator	end() const;
+	iterator		begin()			{ return iterator(_first, _root); }
+	const_iterator	begin() const	{ return const_iterator(_first, _root); }
+	iterator		end()			{ return iterator(_last, _root); }
+	const_iterator	end() const		{ return const_iterator(_last, _root); }
 
-	reverse_iterator		rbegin();
-	const_reverse_iterator	rbegin() const;
-	reverse_iterator		rend();
-	const_reverse_iterator	rend() const;
+	reverse_iterator		rbegin()		{ return reverse_iterator(_last, _root); }
+	const_reverse_iterator	rbegin() const	{ return const_reverse_iterator(_last, _root); }
+	reverse_iterator		rend()			{ return reverse_iterator(_first, _root); }
+	const_reverse_iterator	rend() const	{ return const_reverse_iterator(_first, _root); }
 
 };
 

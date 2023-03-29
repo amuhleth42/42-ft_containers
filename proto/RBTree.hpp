@@ -61,25 +61,25 @@ private:
 	int			deleteNode(const node_ptr toDelete);
 
 public:
-	RBTree();
+	//RBTree();
 
-	explicit RBTree(...);
+	//explicit RBTree(...);
 
-	template< class InputIterator >
-	RBTree(...);
+	//template< class InputIterator >
+	//RBTree(...);
 
-	RBTree(const RBTree& src);
+	//RBTree(const RBTree& src);
 
-	~RBTree();
+	//~RBTree();
 
-	RBTree&	operator=(const RBTree& rhs);
+	//RBTree&	operator=(const RBTree& rhs);
 
-	allocator_type	get_allocator() const;
+	//allocator_type	get_allocator() const;
 
 	//	capacity
 	
-	bool	empty() const;
-	size_type	size() const;
+	//bool	empty() const;
+	//size_type	size() const;
 	size_type	max_size() const;
 
 	//	modifiers
@@ -115,7 +115,7 @@ public:
 
 	key_compare	key_comp() const;
 
-	iterator		begin();
+	/*iterator		begin();
 	const_iterator	begin() const;
 	iterator		end();
 	const_iterator	end() const;
@@ -123,7 +123,7 @@ public:
 	reverse_iterator		rbegin();
 	const_reverse_iterator	rbegin() const;
 	reverse_iterator		rend();
-	const_reverse_iterator	rend() const;
+	const_reverse_iterator	rend() const;*/
 
 };
 
