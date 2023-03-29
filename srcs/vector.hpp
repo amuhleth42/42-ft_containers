@@ -273,10 +273,10 @@ public:
 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
 		InputIterator last)
 	{
-		if (first >= last)
+		if (first == last)
 			return ;
 
-		size_type	n = last - first;
+		size_type	n = ft::distance(first, last);
 		size_type	pos = position - begin();
 
 		if (_size + n > _capacity)
