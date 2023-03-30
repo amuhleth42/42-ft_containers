@@ -3,7 +3,7 @@
 
 # include <memory>
 //# include <iterator> // tmp
-# include "utility.hpp"	// tmp aussi
+# include "utility.hpp"
 
 # include "type_traits.hpp"
 # include "algorithm.hpp"
@@ -339,10 +339,10 @@ public:
 
 	void	swap(vector& x)
 	{
-		std::swap(_size, x._size);
-		std::swap(_capacity, x._capacity);
-		std::swap(_data, x._data);
-		std::swap(_alloc, x._alloc);
+		ft::swap(_size, x._size);
+		ft::swap(_capacity, x._capacity);
+		ft::swap(_data, x._data);
+		ft::swap(_alloc, x._alloc);
 	}
 
 	void	clear()

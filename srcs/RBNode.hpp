@@ -1,8 +1,12 @@
 #ifndef RB_NODE_HPP
 # define RB_NODE_HPP
 
+# include "RBTree.hpp"
+
 namespace	ft
 {
+
+enum	color {BLACK, RED};
 
 template< class T >
 struct	RBNode {
@@ -12,7 +16,7 @@ public:
 	typedef	T&		reference;
 	typedef	T*		pointer;
 	typedef	RBNode*	node_ptr;
-	typedef	enum {BLACK, RED}	color_type;
+	typedef	ft::color	color_type;
 
 	value_type	content;
 	color_type	color;
@@ -21,13 +25,13 @@ public:
 	node_ptr		right;
 
 	RBNode(const value_type& content = value_type(),
-			color_type color = BLACK,
+			color_type color = RED,
 			node_ptr p = NULL,
 			node_ptr left = NULL,
 			node_ptr right = NULL) :
 		content(content),
-		p(p),
 		color(color),
+		p(p),
 		left(left),
 		right(right)
 	{}

@@ -55,7 +55,7 @@ private:
 
 	//void	clearNode(allocator_node& alloc, node_ptr n) const;
 
-	node_ptr	_getNode(const_reference k) const;
+	//node_ptr	_findNode(const_reference k) const;
 
 	iterator	insertNode(const_reference k, node_ptr hint = NULL);
 	int			deleteNode(const node_ptr toDelete);
@@ -84,26 +84,26 @@ public:
 
 	//	modifiers
 
-	void	clear();
+	//void	clear();
 
-	ft::pair<iterator, bool>	insert(const_reference value);
-	iterator	insert(iterator hint, const_reference value);
+	//ft::pair<iterator, bool>	insert(const_reference value);
+	//iterator	insert(iterator hint, const_reference value);
 
-	template< class InputIt >
-	void	insert(InputIt first, InputIt last);
+	//template< class InputIt >
+	//void	insert(InputIt first, InputIt last);
 
-	void	erase(iterator pos);
-	void	erase(iterator first, iterator last);
-	size_type	erase(const_reference key);
+	//void	erase(iterator pos);
+	//void	erase(iterator first, iterator last);
+	//size_type	erase(const_reference key);
 
-	void	swap(RBTree& other);
+	//void	swap(RBTree& other);
 
 	//	lookup
 
-	size_type	count( const_reference key) const;
+	//size_type	count( const_reference key) const;
 
-	iterator	find(const_reference key);
-	const_iterator	find(const_reference key) const;
+	//iterator	find(const_reference key);
+	//const_iterator	find(const_reference key) const;
 
 	iterator	lower_bound(const_reference key);
 	const_iterator	lower_bound(const_reference key) const;

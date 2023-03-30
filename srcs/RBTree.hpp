@@ -4,6 +4,7 @@
 # include <memory>
 # include "RBNode.hpp"
 # include "map_iterator.hpp"
+# include "algorithm.hpp"
 
 namespace	ft
 {
@@ -36,6 +37,9 @@ public:
 
 	typedef	size_t		size_type;
 	typedef	ptrdiff_t	difference_type;
+
+	//typedef	enum {BLACK, RED}	color_type;
+	typedef	ft::color	color_type;
 
 private:
 	allocator_type	_alloc;
@@ -121,7 +125,7 @@ private:
 			y->p = x->p;
 	}
 
-	void	_clearFrom(node_ptr n) const
+	void	_clearFrom(node_ptr n)
 	{
 		if (!n)
 			return ;
@@ -148,9 +152,93 @@ private:
 		return ptr;
 	}
 
-	iterator	_insertNode(const_reference k, node_ptr hint = NULL);
+	iterator	_insertNode(const_reference k)
+	{
+		if (_findNode(k))
+			return iterator(NULL, _root);
 
-	int	_deleteNode(const node_ptr toDelete);
+		node_ptr	ptr = _root;
+		node_ptr	parent = NULL;
+		node_ptr	n = _newNode(k);
+
+		_size++;
+		//newNode->color = RED;
+		if (_size == 1 || _comp(n->content, _first->content))
+			_first = n;
+		if (_size == 1 || _comp(_last->content, n->content))
+			_last = n;
+		while (ptr)
+		{
+			parent = ptr;
+			if (_comp(k, ptr->content))
+				ptr = ptr->left;
+			else
+				ptr = ptr->right;
+		}
+		n->p = parent;
+		if (!parent)
+			_root = n;
+		else if (_comp(n->content, parent->content))
+			parent->left = n;
+		else
+			parent->right = n;
+
+		if (!parent)
+			n->color = BLACK;
+		//else if (parent->p)
+			//_insertFixup(n);
+		return iterator(n, _root);
+	}
+
+	int	_deleteNode(const node_ptr del)
+	{
+		color_type	color;
+		node_ptr	x;
+		node_ptr	y;
+
+		if (!del)
+			return 0;
+		if (del == _first)
+			_first = del->next();
+		if (del == _last)
+			_last = del->previous();
+		color = del->color;
+		if (!del->left)			// case 1
+		{
+			x = del->right;
+			_transplant(del, x);
+		}
+		else if (!del->right)	// case 2
+		{
+			x = del->left;
+			_transplant(del, x);
+		}
+		else					// case 3
+		{
+			y = del->right->min();
+			color = y->color;
+			x = y->right;
+			if (x && y->p == del)
+				x->p = y;
+			else
+			{
+				_transplant(y, y->right);
+				y->right = del->right;
+				if (y->right)
+					y->right->p = y;
+			}
+			_transplant(del, y);
+			y->left = del->left;
+			y->left->p = y;
+			y->color = del->color;
+		}
+		_clearNode(del);
+		if (color == BLACK)
+			color = RED;
+		//	_deleteFix(x);*/
+		_size--;
+		return 1;
+	}
 
 public:
 	RBTree() :
@@ -240,17 +328,57 @@ public:
 		_root = NULL;
 	}
 
-	ft::pair<iterator, bool>	insert(const_reference value);
-	iterator	insert(iterator hint, const_reference value);
+	ft::pair<iterator, bool>	insert(const_reference value)
+	{
+		iterator	it = _insertNode(value);
+
+		if (!it.getPtr())
+		{
+			it = iterator(_findNode(value), _root);
+			return ft::make_pair(it, false);
+		}
+		return ft::make_pair(it, true);
+	}
+
+	iterator	insert(iterator hint, const_reference value)
+	{
+		(void)hint;
+		return _insertNode(value);
+	}
 
 	template< class InputIt >
-	void	insert(InputIt first, InputIt last);
+	void	insert(InputIt first, InputIt last)
+	{
+		for (; first != last ; first++)
+			_insertNode(*first);
+	}
 
-	void	erase(iterator pos);
-	void	erase(iterator first, iterator last);
-	size_type	erase(const_reference key);
+	void	erase(iterator pos)
+	{
+		_deleteNode(pos.getPtr());
+	}
 
-	void	swap(RBTree& other);
+	void	erase(iterator first, iterator last)
+	{
+		for (; first != last ; first++)
+			_deleteNode(first.getPtr());
+	}
+
+	size_type	erase(const_reference key)
+	{
+		return _deleteNode(_findNode(key));
+	}
+
+	void	swap(RBTree& other)
+	{
+		ft::swap(_alloc, other._alloc);
+		ft::swap(_node, other._node);
+		ft::swap(_comp, other._comp);
+		ft::swap(_root, other._root);
+		ft::swap(_first, other._first);
+		ft::swap(_last, other._last);
+		ft::swap(_size, other._size);
+	}
 
 	//	lookup
 
@@ -280,7 +408,7 @@ public:
 	ft::pair<iterator, iterator>	equal_range(const_reference key);
 	ft::pair<const_iterator, const_iterator>	equal_range(const_reference key) const;
 
-	key_compare	key_comp() const;
+	key_compare	key_comp() const	{ return _comp; }
 
 	iterator		begin()			{ return iterator(_first, _root); }
 	const_iterator	begin() const	{ return const_iterator(_first, _root); }

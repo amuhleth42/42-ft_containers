@@ -36,7 +36,7 @@ public:
 	{
 		friend class map;
 	protected:
-		Compare	comp;
+		key_compare	comp;
 		value_compare(Compare c) : comp(c) {}
 
 	public:
@@ -123,7 +123,7 @@ public:
 		iterator	it = _tree.find(value_type(k, mapped_type()));
 
 		if (!it.getPtr())
-			_tree.insert(value_type(k, mapped_type())).first;
+			it = _tree.insert(value_type(k, mapped_type())).first;
 		return it->second;
 	}
 
@@ -191,7 +191,7 @@ public:
 	//	observers
 
 	key_compare		key_comp() const		{ return key_compare(); }
-	value_compare	value_comp() const		{ return value_compare(); }
+	value_compare	value_comp() const		{ return _tree.key_comp(); }
 
 	//	operations
 

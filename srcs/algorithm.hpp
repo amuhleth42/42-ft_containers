@@ -55,8 +55,15 @@ bool	lexicographical_compare(InIt1 first1, InIt1 last1, InIt2 first2, InIt2 last
 	return (first2 != last2);
 }
 
-
+template< class T >
+void	swap(T& a, T& b)
+{
+	T	c(a);
+	a = b;
+	b = c;
 }
+
+}		// namespace ft
 
 
 #endif
