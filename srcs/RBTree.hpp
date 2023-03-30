@@ -61,6 +61,10 @@ private:
 
 	void	_clearNode(node_ptr n)
 	{
+		if (n == _first)
+			_first = n->next();
+		if (n == _last)
+			_last = n->previous();
 		_node.destroy(n);
 		_node.deallocate(n, 1);
 	}
@@ -412,13 +416,32 @@ public:
 
 	iterator		begin()			{ return iterator(_first, _root); }
 	const_iterator	begin() const	{ return const_iterator(_first, _root); }
-	iterator		end()			{ return iterator(_last, _root); }
-	const_iterator	end() const		{ return const_iterator(_last, _root); }
+
+	iterator		end()
+	{
+		if (_size)
+			return iterator(_last->next(), _root);
+		else
+			return begin();
+	}
+	const_iterator	end() const
+	{
+		if (_last)
+			return const_iterator(_last->next(), _root);
+		else
+			return begin();
+	}
 
 	reverse_iterator		rbegin()		{ return reverse_iterator(_last, _root); }
 	const_reverse_iterator	rbegin() const	{ return const_reverse_iterator(_last, _root); }
-	reverse_iterator		rend()			{ return reverse_iterator(_first, _root); }
-	const_reverse_iterator	rend() const	{ return const_reverse_iterator(_first, _root); }
+	/*reverse_iterator		rend()
+	{
+		return reverse_iterator(_first->previous(), _root);
+	}
+	const_reverse_iterator	rend() const
+	{
+		return const_reverse_iterator(_first->previous(), _root);
+	}*/
 
 };
 
