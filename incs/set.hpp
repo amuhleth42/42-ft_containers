@@ -21,6 +21,9 @@ public:
 	typedef	Compare	key_compare;
 	typedef	Key		key_type;
 
+	typedef typename ft::RBTree<Key, Compare, Alloc>::const_iterator iterator;
+	typedef typename ft::RBTree<Key, Compare, Alloc>::const_reverse_iterator reverse_iterator;
+
 private:
 	typedef	ft::RBTree<Key, Compare, Alloc>	tree;
 
