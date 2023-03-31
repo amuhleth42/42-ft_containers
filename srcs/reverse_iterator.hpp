@@ -38,7 +38,10 @@ public:
 		return *this;
 	}
 
-	pointer	base() const		{ return _current.getPtr(); }
+	iterator_type	base() const
+	{
+		return iterator_type(_current);
+	}
 
 	reference	operator*(void) const
 	{

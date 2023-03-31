@@ -2,6 +2,7 @@
 # define RB_NODE_HPP
 
 # include "RBTree.hpp"
+# include <iostream>
 
 namespace	ft
 {
@@ -25,7 +26,7 @@ public:
 	node_ptr		right;
 
 	RBNode(const value_type& content = value_type(),
-			color_type color = RED,
+			color_type color = BLACK,
 			node_ptr p = NULL,
 			node_ptr left = NULL,
 			node_ptr right = NULL) :

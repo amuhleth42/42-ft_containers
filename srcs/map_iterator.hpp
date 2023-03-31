@@ -45,7 +45,8 @@ public:
 	}
 
 
-	node_ptr	getPtr() const			{ return _p; }
+	node_ptr	getNodePtr() const		{ return _p; }
+	pointer		getPtr() const			{ return &(_p->content); }
 
 	reference	operator*() const		{ return _p->content; }
 	pointer		operator->() const		{ return &(_p->content); }
@@ -54,8 +55,8 @@ public:
 	{
 		if (_p)
 			_p = _p->next();
-		else
-			_p = _root->min();
+		//else
+		//	_p = _root->min();
 		return *this;
 	}
 
@@ -92,6 +93,18 @@ public:
 	bool	operator!=(const map_iterator& rhs) const		{ return _p != rhs._p; }
 
 };
+
+template< class Node, class T1, class T2 >
+bool	operator==(const map_iterator<Node, T1>& lhs, const map_iterator<Node, T2>& rhs)
+{
+	return lhs.getNodePtr() == rhs.getNodePtr();
+}
+
+template< class Node, class T1, class T2 >
+bool	operator!=(const map_iterator<Node, T1>& lhs, const map_iterator<Node, T2>& rhs)
+{
+	return lhs.getNodePtr() != rhs.getNodePtr();
+}
 
 }	// namespace ft
 

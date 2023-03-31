@@ -23,7 +23,7 @@ struct	pair
 	pair&	operator=(const pair& pr)
 	{
 		if (this == &pr)
-			return ;
+			return *this;
 		first = pr.first;
 		second = pr.second;
 		return (*this);

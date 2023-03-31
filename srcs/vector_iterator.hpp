@@ -116,38 +116,38 @@ vector_iterator<T>	operator+(typename vector_iterator<T>::difference_type n,
 {
 	return vector_iterator<T>(rhs.getPtr() + n);
 }
-template< class ItL, class ItR >
-bool	operator==(const vector_iterator<ItL>& lhs, const vector_iterator<ItR>& rhs)
+template< class T1, class T2 >
+bool	operator==(const vector_iterator<T1>& lhs, const vector_iterator<T2>& rhs)
 {
 	return lhs.getPtr() == rhs.getPtr();
 }
 
-template< class ItL, class ItR >
-bool	operator!=(const vector_iterator<ItL>& lhs, const vector_iterator<ItR>& rhs)
+template< class T1, class T2 >
+bool	operator!=(const vector_iterator<T1>& lhs, const vector_iterator<T2>& rhs)
 {
 	return lhs.getPtr() != rhs.getPtr();
 }
 
-template< class ItL, class ItR >
-bool	operator<(const vector_iterator<ItL>& lhs, const vector_iterator<ItR>& rhs)
+template< class T1, class T2 >
+bool	operator<(const vector_iterator<T1>& lhs, const vector_iterator<T2>& rhs)
 {
 	return lhs.getPtr() < rhs.getPtr();
 }
 
-template< class ItL, class ItR >
-bool	operator<=(const vector_iterator<ItL>& lhs, const vector_iterator<ItR>& rhs)
+template< class T1, class T2 >
+bool	operator<=(const vector_iterator<T1>& lhs, const vector_iterator<T2>& rhs)
 {
 	return lhs.getPtr() <= rhs.getPtr();
 }
 
-template< class ItL, class ItR >
-bool	operator>(const vector_iterator<ItL>& lhs, const vector_iterator<ItR>& rhs)
+template< class T1, class T2 >
+bool	operator>(const vector_iterator<T1>& lhs, const vector_iterator<T2>& rhs)
 {
 	return lhs.getPtr() > rhs.getPtr();
 }
 
-template< class ItL, class ItR >
-bool	operator>=(const vector_iterator<ItL>& lhs, const vector_iterator<ItR>& rhs)
+template< class T1, class T2 >
+bool	operator>=(const vector_iterator<T1>& lhs, const vector_iterator<T2>& rhs)
 {
 	return lhs.getPtr() >= rhs.getPtr();
 }

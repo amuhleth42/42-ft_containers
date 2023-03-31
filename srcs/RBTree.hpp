@@ -4,6 +4,7 @@
 # include <memory>
 # include "RBNode.hpp"
 # include "map_iterator.hpp"
+# include "reverse_iterator.hpp"
 # include "algorithm.hpp"
 
 namespace	ft
@@ -32,8 +33,8 @@ public:
 	typedef	ft::map_iterator<node_type, value_type>			iterator;
 	typedef	ft::map_iterator<node_type, const value_type>	const_iterator;
 
-	typedef std::reverse_iterator<iterator>			reverse_iterator;
-	typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+	typedef ft::reverse_iterator<iterator>			reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	typedef	size_t		size_type;
 	typedef	ptrdiff_t	difference_type;
@@ -113,8 +114,134 @@ private:
 		y->p = x;
 	}
 
-	void	_insertFix(node_ptr newNode);
-	void	_deleteFix(node_ptr x);
+	void	_insertFixup(node_ptr n)
+	{
+		node_ptr	uncle;
+
+		while (n->p->color == RED)
+		{
+			if (n->p == n->p->p->right)
+			{
+				uncle = n->p->p->left;
+				if (uncle && uncle->color == RED)
+				{
+					uncle->color = BLACK;
+					n->p->color = BLACK;
+					n->p->p->color = RED;
+					n = n->p->p;
+				}
+				else
+				{
+					if (n == n->p->left)
+					{
+						n = n->p;
+						_rightRotate(n);
+					}
+					n->p->color = BLACK;
+					n->p->p->color = RED;
+					_leftRotate(n->p->p);
+				}
+			}
+			else
+			{
+				uncle = n->p->p->right;
+				if (uncle && uncle->color == RED)
+				{
+					uncle->color = BLACK;
+					n->p->color = BLACK;
+					n->p->p->color = RED;
+					n = n->p->p;
+				}
+				else
+				{
+					if (n == n->p->right)
+					{
+						n = n->p;
+						_leftRotate(n);
+					}
+					n->p->color = BLACK;
+					n->p->p->color = RED;
+					_rightRotate(n->p->p);
+				}
+			}
+			if (n == _root)
+				break ;
+		}
+		_root->color = BLACK;
+	}
+
+	void	_deleteFixup(node_ptr x)
+	{
+		node_ptr	bro;
+
+		while (x && x != _root && x->color == BLACK)
+		{
+			if (x == x->p->left)
+			{
+				bro = x->p->right;
+				if (bro->color == RED)
+				{
+					bro->color = BLACK;
+					x->p->color = RED;
+					_leftRotate(x->p);
+					bro = x->p->right;
+				}
+				if (bro->right->color == BLACK && bro->left->color == BLACK)
+				{
+					bro->color = RED;
+					x = x->p;
+				}
+				else
+				{
+					if (bro->right->color == BLACK)
+					{
+						bro->left->color = BLACK;
+						bro->color = RED;
+						_rightRotate(bro);
+						bro = x->p->right;
+					}
+					bro->color = x->p->color;
+					x->p->color = BLACK;
+					bro->right->color = BLACK;
+					_leftRotate(x->p);
+					x = _root;
+				}
+			}
+			else
+			{
+				bro = x->p->left;
+				if (bro->color == RED)
+				{
+					bro->color = BLACK;
+					x->p->color = RED;
+					_rightRotate(x->p);
+					bro = x->p->left;
+				}
+				if (bro->right->color == BLACK && bro->right->color == BLACK)
+				{
+					bro->color = RED;
+					x = x->p;
+				}
+				else
+				{
+					if (bro->left->color == BLACK)
+					{
+						bro->right->color = BLACK;
+						bro->color = RED;
+						_leftRotate(bro);
+						bro = x->p->left;
+					}
+					bro->color = x->p->color;
+					x->p->color = BLACK;
+					bro->left->color = BLACK;
+					_rightRotate(x->p);
+					x = _root;
+				}
+			}
+		}
+		if (x)
+			x->color = BLACK;
+	}
 
 	void	_transplant(node_ptr x, node_ptr y)
 	{
@@ -166,7 +293,7 @@ private:
 		node_ptr	n = _newNode(k);
 
 		_size++;
-		//newNode->color = RED;
+		n->color = RED;
 		if (_size == 1 || _comp(n->content, _first->content))
 			_first = n;
 		if (_size == 1 || _comp(_last->content, n->content))
@@ -189,8 +316,8 @@ private:
 
 		if (!parent)
 			n->color = BLACK;
-		//else if (parent->p)
-			//_insertFixup(n);
+		else if (parent->p)
+			_insertFixup(n);
 		return iterator(n, _root);
 	}
 
@@ -238,8 +365,7 @@ private:
 		}
 		_clearNode(del);
 		if (color == BLACK)
-			color = RED;
-		//	_deleteFix(x);*/
+			_deleteFixup(x);
 		_size--;
 		return 1;
 	}
@@ -326,10 +452,11 @@ public:
 	void	clear()
 	{
 		_size = 0;
-		if (!_root)
-			return ;
-		_clearFrom(_root);
+		if (_root)
+			_clearFrom(_root);
 		_root = NULL;
+		_first = NULL;
+		_last = NULL;
 	}
 
 	ft::pair<iterator, bool>	insert(const_reference value)
@@ -359,13 +486,13 @@ public:
 
 	void	erase(iterator pos)
 	{
-		_deleteNode(pos.getPtr());
+		_deleteNode(pos.getNodePtr());
 	}
 
 	void	erase(iterator first, iterator last)
 	{
-		for (; first != last ; first++)
-			_deleteNode(first.getPtr());
+		while (first != last)
+			_deleteNode((first++).getNodePtr());
 	}
 
 	size_type	erase(const_reference key)
@@ -388,7 +515,7 @@ public:
 
 	size_type	count( const_reference key) const
 	{
-		if (findNode(key))
+		if (_findNode(key))
 			return 1;
 		else
 			return 0;
@@ -404,13 +531,67 @@ public:
 		return const_iterator(_findNode(key), _root);
 	}
 
-	iterator	lower_bound(const_reference key);
-	const_iterator	lower_bound(const_reference key) const;
-	iterator	upper_bound(const_reference key);
-	const_iterator	upper_bound(const_reference key) const;
+	iterator	lower_bound(const_reference key)
+	{
+		if (!_root)
+			return iterator(NULL, _root);
 
-	ft::pair<iterator, iterator>	equal_range(const_reference key);
-	ft::pair<const_iterator, const_iterator>	equal_range(const_reference key) const;
+		node_ptr	n = _root->min();
+
+		while (n && _comp(n->content, key))
+			n = n->next();
+		return iterator(n, _root);
+	}
+
+	const_iterator	lower_bound(const_reference key) const
+	{
+		if (!_root)
+			return const_iterator(NULL, _root);
+
+		node_ptr	n = _root->min();
+
+		while (n && _comp(n->content, key))
+			n = n->next();
+		return const_iterator(n, _root);
+	}
+
+	iterator	upper_bound(const_reference key)
+	{
+		if (!_root)
+			return iterator(NULL, _root);
+
+		node_ptr	n = _root->min();
+
+		while (n && _comp(n->content, key))
+			n = n->next();
+		if (n && !_comp(key, n->content))
+			n = n->next();
+		return iterator(n, _root);
+	}
+
+	const_iterator	upper_bound(const_reference key) const
+	{
+		if (!_root)
+			return const_iterator(NULL, _root);
+
+		node_ptr	n = _root->min();
+
+		while (n && _comp(n->content, key))
+			n = n->next();
+		if (n && !_comp(key, n->content))
+			n = n->next();
+		return const_iterator(n, _root);
+	}
+
+	ft::pair<iterator, iterator>	equal_range(const_reference key)
+	{
+		return ft::make_pair(lower_bound(key), upper_bound(key));
+	}
+
+	ft::pair<const_iterator, const_iterator>	equal_range(const_reference key) const
+	{
+		return ft::make_pair(lower_bound(key), upper_bound(key));
+	}
 
 	key_compare	key_comp() const	{ return _comp; }
 
@@ -432,16 +613,16 @@ public:
 			return begin();
 	}
 
-	reverse_iterator		rbegin()		{ return reverse_iterator(_last, _root); }
-	const_reverse_iterator	rbegin() const	{ return const_reverse_iterator(_last, _root); }
-	/*reverse_iterator		rend()
+	reverse_iterator		rbegin()		{ return reverse_iterator(end()); }
+	const_reverse_iterator	rbegin() const	{ return const_reverse_iterator(end()); }
+	reverse_iterator		rend()
 	{
-		return reverse_iterator(_first->previous(), _root);
+		return reverse_iterator(begin());
 	}
 	const_reverse_iterator	rend() const
 	{
-		return const_reverse_iterator(_first->previous(), _root);
-	}*/
+		return const_reverse_iterator(begin());
+	}
 
 };
 

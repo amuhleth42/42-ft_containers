@@ -205,7 +205,7 @@ public:
 		return _tree.find(value_type(k, mapped_type()));
 	}
 
-	size_type	count(const key_type* k) const
+	size_type	count(const key_type k) const
 	{
 		return _tree.count(value_type(k, mapped_type()));
 	}
@@ -243,6 +243,47 @@ public:
 
 };
 
+template< class K, class T, class C, class A >
+bool	operator==(const map<K, T, C, A>& lhs, const map<K, T, C, A>& rhs)
+{
+	return lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template< class K, class T, class C, class A >
+bool	operator!=(const map<K, T, C, A>& lhs, const map<K, T, C, A>& rhs)
+{
+	return !(lhs == rhs);
+}
+
+template< class K, class T, class C, class A >
+bool	operator<(const map<K, T, C, A>& lhs, const map<K, T, C, A>& rhs)
+{
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template< class K, class T, class C, class A >
+bool	operator<=(const map<K, T, C, A>& lhs, const map<K, T, C, A>& rhs)
+{
+	return !(rhs < lhs);
+}
+
+template< class K, class T, class C, class A >
+bool	operator>(const map<K, T, C, A>& lhs, const map<K, T, C, A>& rhs)
+{
+	return rhs < lhs;
+}
+
+template< class K, class T, class C, class A >
+bool	operator>=(const map<K, T, C, A>& lhs, const map<K, T, C, A>& rhs)
+{
+	return !(lhs < rhs);
+}
+
+template< class K, class T, class C, class A >
+void	swap(map<K, T, C, A>& lhs, map<K, T, C, A>& rhs)
+{
+	lhs.swap(rhs);
+}
 
 }	// namespace ft
 
