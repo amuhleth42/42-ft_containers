@@ -6,6 +6,8 @@
 # include "map_iterator.hpp"
 # include "reverse_iterator.hpp"
 # include "algorithm.hpp"
+# include "functional.hpp"
+# include "utility.hpp"
 
 namespace	ft
 {
