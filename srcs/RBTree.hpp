@@ -68,6 +68,10 @@ private:
 			_first = n->next();
 		if (n == _last)
 			_last = n->previous();
+		if (n->p && n == n->p->right)
+			n->p->right = NULL;
+		if (n->p && n == n->p->left)
+			n->p->left = NULL;
 		_node.destroy(n);
 		_node.deallocate(n, 1);
 	}

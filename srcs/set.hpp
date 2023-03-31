@@ -41,7 +41,7 @@ public:
 
 	set(const set& src) : tree(src) {}
 
-	virtual ~set(void) {}
+	~set(void) {}
 
 	key_compare	value_comp() const		{ return this->key_comp(); }
 

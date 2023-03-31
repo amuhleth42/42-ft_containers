@@ -37,7 +37,12 @@ public:
 		right(right)
 	{}
 
-	~RBNode() {}
+	~RBNode()
+	{
+		p = NULL;
+		left = NULL;
+		right = NULL;
+	}
 
 	reference	operator*(void) const	{ return content; }
 	pointer		operator->(void) const	{ return &content; }
