@@ -7,6 +7,7 @@
 #include <map>
 #include <stack>
 #include <set>
+#include <list>
 
 template< typename T >
 void	printVector(ft::vector<T> const& v)
@@ -28,8 +29,8 @@ void	printMap(ft::map<K, V> const& m)
 	std::cout << std::endl;
 }
 
-template< typename T >
-void	printStack(ft::stack<T> const& s)
+template< typename T, class Cont>
+void	printStack(ft::stack<T, Cont> const& s)
 {
 	std::cout << "size: " << s.size() << std::endl;
 	if (s.size())		// to avoid undefined behavior
@@ -76,10 +77,13 @@ int	main(void)
 
 		v3.assign(v5.begin(), v5.end());
 		printVector(v3);
-		for (ft::vector<int>::iterator	it = v3.begin() ; it != v3.end() ; it++)
-			std::cout << *it << " ";
-		std::cout << std::endl;
 
+		std::cout << "swap test" << std::endl;
+		printVector(v1);
+		printVector(v5);
+		swap(v1, v5);
+		printVector(v1);
+		printVector(v5);
 
 	}
 
@@ -90,6 +94,10 @@ int	main(void)
 
 		m1.insert(ft::make_pair(2, 4));
 		m1.insert(ft::make_pair(3, 9));
+		
+		printMap(m1);
+		
+		m1.insert(ft::make_pair(3, 10));
 		
 		printMap(m1);
 
@@ -132,6 +140,24 @@ int	main(void)
 		
 		s1.pop();
 		printStack(s1);
+
+		std::cout << "----------------" << std::endl;
+		
+		ft::stack<int, std::list<int> >	s2;
+		printStack(s2);
+
+		std::cout << "empty? " << s2.empty() << std::endl;
+
+		s2.push(1);
+		s2.push(14);
+		s2.push(12);
+		s2.push(42);
+		
+		printStack(s2);
+		std::cout << "empty? " << s2.empty() << std::endl;
+		
+		s2.pop();
+		printStack(s2);
 
 	}
 	
